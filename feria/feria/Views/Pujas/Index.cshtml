@@ -1,0 +1,45 @@
+﻿
+@model IEnumerable<feria.Models.VentaArticulo>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.IDcomprador)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Articulo.FechaIngreso)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Articulo.Vendedor.NombreUsuario)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDcomprador)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Articulo.FechaIngreso)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Articulo.Vendedor.NombreUsuario)
+            </td>
+            <td>
+                @Html.ActionLink("Pujar", "Edit", new { id = item.IDarticulo }) |
+                
+            </td>
+        </tr>
+    }
+
+</table>

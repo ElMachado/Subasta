@@ -1,0 +1,562 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DBsubastaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Articulo">
+          <Key>
+            <PropertyRef Name="IDarticulo" />
+          </Key>
+          <Property Name="IDarticulo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDvendedor" Type="int" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FechaIngreso" Type="date" Nullable="false" />
+          <Property Name="FechaSalida" Type="date" />
+        </EntityType>
+        <EntityType Name="Comprador">
+          <Key>
+            <PropertyRef Name="IDusuario" />
+          </Key>
+          <Property Name="IDusuario" Type="int" Nullable="false" />
+          <Property Name="NombreUsuario" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ContraseñaUsuario" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IDrol" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="IDrol" />
+          </Key>
+          <Property Name="Descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IDrol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RolesXUsuario">
+          <Key>
+            <PropertyRef Name="IDusuario" />
+            <PropertyRef Name="IDrol" />
+          </Key>
+          <Property Name="IDusuario" Type="int" Nullable="false" />
+          <Property Name="IDrol" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="IDusuario" />
+          </Key>
+          <Property Name="DocNumero" Type="int" Nullable="false" />
+          <Property Name="IDusuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" />
+          <Property Name="Apellido" Type="varchar" MaxLength="50" />
+          <Property Name="RolActual" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vendedor">
+          <Key>
+            <PropertyRef Name="IDusuario" />
+          </Key>
+          <Property Name="IDusuario" Type="int" Nullable="false" />
+          <Property Name="NombreUsuario" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ContrasenaUsuario" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IDrol" Type="int" />
+        </EntityType>
+        <EntityType Name="VentaArticulo">
+          <Key>
+            <PropertyRef Name="IDarticulo" />
+            <PropertyRef Name="Fecha" />
+          </Key>
+          <Property Name="IDarticulo" Type="int" Nullable="false" />
+          <Property Name="Fecha" Type="date" Nullable="false" />
+          <Property Name="IDcomprador" Type="int" Nullable="false" />
+          <Property Name="PrecioSalida" Type="money" Nullable="false" />
+          <Property Name="PrecioVenta" Type="money" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Articulo_Vendedor">
+          <End Role="Vendedor" Type="Self.Vendedor" Multiplicity="1" />
+          <End Role="Articulo" Type="Self.Articulo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendedor">
+              <PropertyRef Name="IDusuario" />
+            </Principal>
+            <Dependent Role="Articulo">
+              <PropertyRef Name="IDvendedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comprador_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Comprador" Type="Self.Comprador" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="IDrol" />
+            </Principal>
+            <Dependent Role="Comprador">
+              <PropertyRef Name="IDrol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comprador_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Comprador" Type="Self.Comprador" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IDusuario" />
+            </Principal>
+            <Dependent Role="Comprador">
+              <PropertyRef Name="IDusuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolesXUsuario_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="RolesXUsuario" Type="Self.RolesXUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="IDrol" />
+            </Principal>
+            <Dependent Role="RolesXUsuario">
+              <PropertyRef Name="IDrol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolesXUsuario_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="RolesXUsuario" Type="Self.RolesXUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IDusuario" />
+            </Principal>
+            <Dependent Role="RolesXUsuario">
+              <PropertyRef Name="IDusuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Usuarios_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="IDrol" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="RolActual" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vendedor_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
+          <End Role="Vendedor" Type="Self.Vendedor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="IDrol" />
+            </Principal>
+            <Dependent Role="Vendedor">
+              <PropertyRef Name="IDrol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vendedor_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Vendedor" Type="Self.Vendedor" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IDusuario" />
+            </Principal>
+            <Dependent Role="Vendedor">
+              <PropertyRef Name="IDusuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VentaArticulo_Articulo">
+          <End Role="Articulo" Type="Self.Articulo" Multiplicity="1" />
+          <End Role="VentaArticulo" Type="Self.VentaArticulo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Articulo">
+              <PropertyRef Name="IDarticulo" />
+            </Principal>
+            <Dependent Role="VentaArticulo">
+              <PropertyRef Name="IDarticulo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VentaArticulo_Comprador">
+          <End Role="Comprador" Type="Self.Comprador" Multiplicity="1" />
+          <End Role="VentaArticulo" Type="Self.VentaArticulo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Comprador">
+              <PropertyRef Name="IDusuario" />
+            </Principal>
+            <Dependent Role="VentaArticulo">
+              <PropertyRef Name="IDcomprador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBsubastaModelStoreContainer">
+          <EntitySet Name="Articulo" EntityType="Self.Articulo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Comprador" EntityType="Self.Comprador" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RolesXUsuario" EntityType="Self.RolesXUsuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vendedor" EntityType="Self.Vendedor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VentaArticulo" EntityType="Self.VentaArticulo" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Articulo_Vendedor" Association="Self.FK_Articulo_Vendedor">
+            <End Role="Vendedor" EntitySet="Vendedor" />
+            <End Role="Articulo" EntitySet="Articulo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comprador_Roles" Association="Self.FK_Comprador_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Comprador" EntitySet="Comprador" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comprador_Usuarios" Association="Self.FK_Comprador_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Comprador" EntitySet="Comprador" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolesXUsuario_Roles" Association="Self.FK_RolesXUsuario_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="RolesXUsuario" EntitySet="RolesXUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolesXUsuario_Usuarios" Association="Self.FK_RolesXUsuario_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="RolesXUsuario" EntitySet="RolesXUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usuarios_Roles" Association="Self.FK_Usuarios_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vendedor_Roles" Association="Self.FK_Vendedor_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Vendedor" EntitySet="Vendedor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vendedor_Usuarios" Association="Self.FK_Vendedor_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Vendedor" EntitySet="Vendedor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VentaArticulo_Articulo" Association="Self.FK_VentaArticulo_Articulo">
+            <End Role="Articulo" EntitySet="Articulo" />
+            <End Role="VentaArticulo" EntitySet="VentaArticulo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VentaArticulo_Comprador" Association="Self.FK_VentaArticulo_Comprador">
+            <End Role="Comprador" EntitySet="Comprador" />
+            <End Role="VentaArticulo" EntitySet="VentaArticulo" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBsubastaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Articulo">
+          <Key>
+            <PropertyRef Name="IDarticulo" />
+          </Key>
+          <Property Name="IDarticulo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDvendedor" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FechaIngreso" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="FechaSalida" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Vendedor" Relationship="Self.FK_Articulo_Vendedor" FromRole="Articulo" ToRole="Vendedor" />
+          <NavigationProperty Name="VentaArticulo" Relationship="Self.FK_VentaArticulo_Articulo" FromRole="Articulo" ToRole="VentaArticulo" />
+        </EntityType>
+        <EntityType Name="Comprador">
+          <Key>
+            <PropertyRef Name="IDusuario" />
+          </Key>
+          <Property Name="IDusuario" Type="Int32" Nullable="false" />
+          <Property Name="NombreUsuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ContraseñaUsuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDrol" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Roles" Relationship="Self.FK_Comprador_Roles" FromRole="Comprador" ToRole="Roles" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK_Comprador_Usuarios" FromRole="Comprador" ToRole="Usuarios" />
+          <NavigationProperty Name="VentaArticulo" Relationship="Self.FK_VentaArticulo_Comprador" FromRole="Comprador" ToRole="VentaArticulo" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="IDrol" />
+          </Key>
+          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDrol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Comprador" Relationship="Self.FK_Comprador_Roles" FromRole="Roles" ToRole="Comprador" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK_Usuarios_Roles" FromRole="Roles" ToRole="Usuarios" />
+          <NavigationProperty Name="Vendedor" Relationship="Self.FK_Vendedor_Roles" FromRole="Roles" ToRole="Vendedor" />
+          <NavigationProperty Name="Usuarios1" Relationship="Self.RolesXUsuario" FromRole="Roles" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="IDusuario" />
+          </Key>
+          <Property Name="DocNumero" Type="Int32" Nullable="false" />
+          <Property Name="IDusuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Apellido" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RolActual" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Comprador" Relationship="Self.FK_Comprador_Usuarios" FromRole="Usuarios" ToRole="Comprador" />
+          <NavigationProperty Name="Roles" Relationship="Self.FK_Usuarios_Roles" FromRole="Usuarios" ToRole="Roles" />
+          <NavigationProperty Name="Vendedor" Relationship="Self.FK_Vendedor_Usuarios" FromRole="Usuarios" ToRole="Vendedor" />
+          <NavigationProperty Name="Roles1" Relationship="Self.RolesXUsuario" FromRole="Usuarios" ToRole="Roles" />
+        </EntityType>
+        <EntityType Name="Vendedor">
+          <Key>
+            <PropertyRef Name="IDusuario" />
+          </Key>
+          <Property Name="IDusuario" Type="Int32" Nullable="false" />
+          <Property Name="NombreUsuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ContrasenaUsuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDrol" Type="Int32" />
+          <NavigationProperty Name="Articulo" Relationship="Self.FK_Articulo_Vendedor" FromRole="Vendedor" ToRole="Articulo" />
+          <NavigationProperty Name="Roles" Relationship="Self.FK_Vendedor_Roles" FromRole="Vendedor" ToRole="Roles" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK_Vendedor_Usuarios" FromRole="Vendedor" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="VentaArticulo">
+          <Key>
+            <PropertyRef Name="IDarticulo" />
+            <PropertyRef Name="Fecha" />
+          </Key>
+          <Property Name="IDarticulo" Type="Int32" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="IDcomprador" Type="Int32" Nullable="false" />
+          <Property Name="PrecioSalida" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="PrecioVenta" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="Articulo" Relationship="Self.FK_VentaArticulo_Articulo" FromRole="VentaArticulo" ToRole="Articulo" />
+          <NavigationProperty Name="Comprador" Relationship="Self.FK_VentaArticulo_Comprador" FromRole="VentaArticulo" ToRole="Comprador" />
+        </EntityType>
+        <Association Name="FK_Articulo_Vendedor">
+          <End Role="Vendedor" Type="Self.Vendedor" Multiplicity="1" />
+          <End Role="Articulo" Type="Self.Articulo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendedor">
+              <PropertyRef Name="IDusuario" />
+            </Principal>
+            <Dependent Role="Articulo">
+              <PropertyRef Name="IDvendedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VentaArticulo_Articulo">
+          <End Role="Articulo" Type="Self.Articulo" Multiplicity="1" />
+          <End Role="VentaArticulo" Type="Self.VentaArticulo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Articulo">
+              <PropertyRef Name="IDarticulo" />
+            </Principal>
+            <Dependent Role="VentaArticulo">
+              <PropertyRef Name="IDarticulo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comprador_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Comprador" Type="Self.Comprador" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="IDrol" />
+            </Principal>
+            <Dependent Role="Comprador">
+              <PropertyRef Name="IDrol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comprador_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Comprador" Type="Self.Comprador" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IDusuario" />
+            </Principal>
+            <Dependent Role="Comprador">
+              <PropertyRef Name="IDusuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VentaArticulo_Comprador">
+          <End Role="Comprador" Type="Self.Comprador" Multiplicity="1" />
+          <End Role="VentaArticulo" Type="Self.VentaArticulo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Comprador">
+              <PropertyRef Name="IDusuario" />
+            </Principal>
+            <Dependent Role="VentaArticulo">
+              <PropertyRef Name="IDcomprador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Usuarios_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="IDrol" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="RolActual" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vendedor_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
+          <End Role="Vendedor" Type="Self.Vendedor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="IDrol" />
+            </Principal>
+            <Dependent Role="Vendedor">
+              <PropertyRef Name="IDrol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vendedor_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Vendedor" Type="Self.Vendedor" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IDusuario" />
+            </Principal>
+            <Dependent Role="Vendedor">
+              <PropertyRef Name="IDusuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RolesXUsuario">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="*" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="DBsubastaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Articulo" EntityType="Self.Articulo" />
+          <EntitySet Name="Comprador" EntityType="Self.Comprador" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" />
+          <EntitySet Name="Vendedor" EntityType="Self.Vendedor" />
+          <EntitySet Name="VentaArticulo" EntityType="Self.VentaArticulo" />
+          <AssociationSet Name="FK_Articulo_Vendedor" Association="Self.FK_Articulo_Vendedor">
+            <End Role="Vendedor" EntitySet="Vendedor" />
+            <End Role="Articulo" EntitySet="Articulo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VentaArticulo_Articulo" Association="Self.FK_VentaArticulo_Articulo">
+            <End Role="Articulo" EntitySet="Articulo" />
+            <End Role="VentaArticulo" EntitySet="VentaArticulo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comprador_Roles" Association="Self.FK_Comprador_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Comprador" EntitySet="Comprador" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comprador_Usuarios" Association="Self.FK_Comprador_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Comprador" EntitySet="Comprador" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VentaArticulo_Comprador" Association="Self.FK_VentaArticulo_Comprador">
+            <End Role="Comprador" EntitySet="Comprador" />
+            <End Role="VentaArticulo" EntitySet="VentaArticulo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usuarios_Roles" Association="Self.FK_Usuarios_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vendedor_Roles" Association="Self.FK_Vendedor_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Vendedor" EntitySet="Vendedor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vendedor_Usuarios" Association="Self.FK_Vendedor_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Vendedor" EntitySet="Vendedor" />
+          </AssociationSet>
+          <AssociationSet Name="RolesXUsuario" Association="Self.RolesXUsuario">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBsubastaModelStoreContainer" CdmEntityContainer="DBsubastaEntities">
+          <EntitySetMapping Name="Articulo">
+            <EntityTypeMapping TypeName="DBsubastaModel.Articulo">
+              <MappingFragment StoreEntitySet="Articulo">
+                <ScalarProperty Name="IDarticulo" ColumnName="IDarticulo" />
+                <ScalarProperty Name="IDvendedor" ColumnName="IDvendedor" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="FechaIngreso" ColumnName="FechaIngreso" />
+                <ScalarProperty Name="FechaSalida" ColumnName="FechaSalida" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Comprador">
+            <EntityTypeMapping TypeName="DBsubastaModel.Comprador">
+              <MappingFragment StoreEntitySet="Comprador">
+                <ScalarProperty Name="IDusuario" ColumnName="IDusuario" />
+                <ScalarProperty Name="NombreUsuario" ColumnName="NombreUsuario" />
+                <ScalarProperty Name="ContraseñaUsuario" ColumnName="ContraseñaUsuario" />
+                <ScalarProperty Name="IDrol" ColumnName="IDrol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="DBsubastaModel.Roles">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IDrol" ColumnName="IDrol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="DBsubastaModel.Usuarios">
+              <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="DocNumero" ColumnName="DocNumero" />
+                <ScalarProperty Name="IDusuario" ColumnName="IDusuario" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="RolActual" ColumnName="RolActual" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vendedor">
+            <EntityTypeMapping TypeName="DBsubastaModel.Vendedor">
+              <MappingFragment StoreEntitySet="Vendedor">
+                <ScalarProperty Name="IDusuario" ColumnName="IDusuario" />
+                <ScalarProperty Name="NombreUsuario" ColumnName="NombreUsuario" />
+                <ScalarProperty Name="ContrasenaUsuario" ColumnName="ContrasenaUsuario" />
+                <ScalarProperty Name="IDrol" ColumnName="IDrol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VentaArticulo">
+            <EntityTypeMapping TypeName="DBsubastaModel.VentaArticulo">
+              <MappingFragment StoreEntitySet="VentaArticulo">
+                <ScalarProperty Name="IDarticulo" ColumnName="IDarticulo" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="IDcomprador" ColumnName="IDcomprador" />
+                <ScalarProperty Name="PrecioSalida" ColumnName="PrecioSalida" />
+                <ScalarProperty Name="PrecioVenta" ColumnName="PrecioVenta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="RolesXUsuario" TypeName="DBsubastaModel.RolesXUsuario" StoreEntitySet="RolesXUsuario">
+            <EndProperty Name="Roles">
+              <ScalarProperty Name="IDrol" ColumnName="IDrol" />
+            </EndProperty>
+            <EndProperty Name="Usuarios">
+              <ScalarProperty Name="IDusuario" ColumnName="IDusuario" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,52 @@
+﻿@model IEnumerable<feria.Models.Comprador>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.NombreUsuario)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ContraseñaUsuario)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Roles.Descripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Usuarios.Nombre)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.NombreUsuario)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContraseñaUsuario)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Roles.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Usuarios.Nombre)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.IDusuario }) |
+            @Html.ActionLink("Details", "Details", new { id=item.IDusuario }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.IDusuario })
+        </td>
+    </tr>
+}
+
+</table>

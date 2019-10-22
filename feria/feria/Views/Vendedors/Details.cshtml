@@ -1,0 +1,51 @@
+﻿@model feria.Models.Vendedor
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Vendedor</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NombreUsuario)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NombreUsuario)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ContrasenaUsuario)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContrasenaUsuario)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Roles.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Roles.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Usuarios.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Usuarios.Nombre)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IDusuario }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,64 @@
+﻿@model IEnumerable<feria.Models.Usuarios>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DocNumero)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Apellido)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Comprador.NombreUsuario)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Roles.Descripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Vendedor.NombreUsuario)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DocNumero)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Apellido)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comprador.NombreUsuario)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Roles.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Vendedor.NombreUsuario)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.IDusuario }) |
+            @Html.ActionLink("Details", "Details", new { id=item.IDusuario }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.IDusuario })
+        </td>
+    </tr>
+}
+
+</table>
